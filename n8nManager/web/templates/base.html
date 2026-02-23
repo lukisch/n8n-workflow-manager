@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}n8nManager{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="/">n8nManager</a>
+            <span class="version">v0.1.0</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Dashboard</a>
+            <a href="/creator" class="nav-link">Erstellen</a>
+            <a href="/servers" class="nav-link">Server</a>
+            <a href="/import" class="nav-link">Import</a>
+            <a href="/docs" class="nav-link" target="_blank">API Docs</a>
+        </div>
+    </nav>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <script src="/static/js/api_client.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

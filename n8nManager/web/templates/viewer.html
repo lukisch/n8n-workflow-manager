@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ workflow.name }} - Viewer{% endblock %}
+{% block content %}
+<div class="viewer">
+    <div class="viewer-header">
+        <h1>{{ workflow.name }}</h1>
+        <div class="viewer-meta">
+            <span class="badge">{{ workflow.node_count }} Nodes</span>
+            <span class="badge trigger">{{ workflow.trigger_type or 'Kein Trigger' }}</span>
+            <span class="badge source">{{ workflow.source }}</span>
+        </div>
+        <div class="viewer-actions">
+            <a href="/editor/{{ workflow.id }}" class="btn">Bearbeiten</a>
+            <button onclick="exportJSON()" class="btn">JSON Export</button>
+            <button onclick="pushToServer()" class="btn btn-primary">Push to Server</button>
+        </div>
+    </div>
+    {% if workflow.description %}
+    <p class="description">{{ workflow.description }}</p>
+    {% endif %}
+    <div id="workflow-graph" class="graph-container"></div>
+    <div id="node-details" class="node-details hidden">
+        <h3 id="detail-name">Node Details</h3>
+        <pre id="detail-params"></pre>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/graph_renderer.js"></script>
+<script>
+    const graphData = {{ graph_data | safe }};
+    const workflowId = {{ workflow.id }};
+    initGraph('workflow-graph', graphData);
+
+    function exportJSON() {
+        window.open('/api/workflows/' + workflowId, '_blank');
+    }
+    async function pushToServer() {
+        const resp = await apiClient.post('/api/export/' + workflowId + '/to-server');
+        if (resp.message) alert(resp.message);
+        else alert('Fehler: ' + (resp.detail || 'Unbekannt'));
+    }
+</script>
+{% endblock %}

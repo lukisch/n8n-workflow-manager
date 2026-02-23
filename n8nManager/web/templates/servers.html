@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Server - n8nManager{% endblock %}
+{% block content %}
+<div class="servers-page">
+    <h1>Server-Verwaltung</h1>
+    <div class="add-server-form">
+        <h3>Server hinzufuegen</h3>
+        <form onsubmit="addServer(event)">
+            <input type="text" id="srv-name" placeholder="Name" required>
+            <input type="url" id="srv-url" placeholder="http://host:5678" required>
+            <input type="text" id="srv-key" placeholder="API-Key">
+            <label><input type="checkbox" id="srv-default"> Default</label>
+            <button type="submit" class="btn btn-primary">Hinzufuegen</button>
+        </form>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>URL</th><th>Status</th><th>Default</th><th>Aktionen</th></tr>
+        </thead>
+        <tbody>
+            {% for srv in servers %}
+            <tr>
+                <td>{{ srv.id }}</td>
+                <td>{{ srv.name }}</td>
+                <td>{{ srv.url }}</td>
+                <td><span class="badge {{ srv.status }}">{{ srv.status }}</span></td>
+                <td>{{ '★' if srv.is_default else '-' }}</td>
+                <td>
+                    <button onclick="pingServer({{ srv.id }})" class="btn btn-sm">Ping</button>
+                    <button onclick="pullFromServer({{ srv.id }})" class="btn btn-sm">Pull</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function addServer(e) {
+    e.preventDefault();
+    const data = {
+        name: document.getElementById('srv-name').value,
+        url: document.getElementById('srv-url').value,
+        api_key: document.getElementById('srv-key').value,
+        is_default: document.getElementById('srv-default').checked,
+    };
+    const resp = await apiClient.post('/api/servers', data);
+    if (resp.id) location.reload();
+    else alert('Fehler: ' + (resp.detail || 'Unbekannt'));
+}
+async function pingServer(id) {
+    const resp = await apiClient.post('/api/servers/' + id + '/ping');
+    alert(resp.status ? 'Status: ' + resp.status : 'Fehler: ' + (resp.detail || 'Unbekannt'));
+    location.reload();
+}
+async function pullFromServer(id) {
+    const resp = await apiClient.post('/api/pull/' + id);
+    alert(resp.message || resp.detail || 'Unbekannt');
+    location.reload();
+}
+</script>
+{% endblock %}

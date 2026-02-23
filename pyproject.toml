@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "n8n-workflow-manager"
+version = "0.1.0"
+description = "Visual n8n workflow manager with web UI, REST API, and multi-server sync"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Lukas Geiger", email = "lukisch@users.noreply.github.com"}
+]
+keywords = ["n8n", "workflow", "automation", "manager", "visualization", "vis.js", "fastapi"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
+    "httpx>=0.24.0",
+    "jinja2>=3.1.0",
+    "pydantic>=2.0.0",
+    "python-multipart",
+]
+
+[project.optional-dependencies]
+ssh = ["paramiko>=3.0.0"]
+dev = ["pytest", "pytest-asyncio", "ruff"]
+
+[project.scripts]
+n8n-manager = "n8nManager.n8n_manager:main"
+
+[project.urls]
+Homepage = "https://github.com/lukisch/n8n-workflow-manager"
+Documentation = "https://github.com/lukisch/n8n-workflow-manager#readme"
+Repository = "https://github.com/lukisch/n8n-workflow-manager"
+Issues = "https://github.com/lukisch/n8n-workflow-manager/issues"
+
+[tool.setuptools.packages.find]
+include = ["n8nManager*"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100

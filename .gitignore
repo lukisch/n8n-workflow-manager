@@ -1,0 +1,26 @@
+# Internal planning files
+PLAN.txt
+PLAN_*.txt
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+data/*.db
+exports/
+.env
+.venv/
+env/
+venv/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

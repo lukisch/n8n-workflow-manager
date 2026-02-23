@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  n8n-manager:
+    build: .
+    ports:
+      - "8100:8100"
+    volumes:
+      - ./data:/app/data
+      - ./templates:/app/templates
+    environment:
+      - PYTHONIOENCODING=utf-8
+    restart: unless-stopped

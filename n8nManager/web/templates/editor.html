@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ workflow.name }} - Editor{% endblock %}
+{% block content %}
+<div class="editor">
+    <div class="editor-header">
+        <h1>Editor: {{ workflow.name }}</h1>
+        <div class="editor-actions">
+            <button onclick="saveWorkflow()" class="btn btn-primary">Speichern</button>
+            <a href="/viewer/{{ workflow.id }}" class="btn">Zurueck zum Viewer</a>
+        </div>
+    </div>
+    <div class="editor-layout">
+        <div class="editor-sidebar">
+            <h3>Node-Katalog</h3>
+            <div id="node-catalog-list"></div>
+        </div>
+        <div id="editor-graph" class="graph-container"></div>
+        <div class="editor-properties">
+            <h3>Eigenschaften</h3>
+            <div id="property-panel">
+                <p class="empty-state">Node anklicken zum Bearbeiten</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/graph_renderer.js"></script>
+<script src="/static/js/workflow_editor.js"></script>
+<script>
+    const graphData = {{ graph_data | safe }};
+    const nodeCatalog = {{ node_catalog | safe }};
+    const workflowId = {{ workflow.id }};
+    initEditor('editor-graph', graphData, nodeCatalog, workflowId);
+</script>
+{% endblock %}

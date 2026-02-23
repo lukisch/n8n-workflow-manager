@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - n8nManager{% endblock %}
+{% block content %}
+<div class="dashboard">
+    <h1>Dashboard</h1>
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    <div class="stats-bar">
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.workflows or 0 }}</span>
+            <span class="stat-label">Workflows</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ stats.servers or 0 }}</span>
+            <span class="stat-label">Server</span>
+        </div>
+    </div>
+    <div class="section">
+        <h2>Workflows</h2>
+        {% if workflows %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Nodes</th>
+                    <th>Trigger</th>
+                    <th>Quelle</th>
+                    <th>Aktiv</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for wf in workflows %}
+                <tr>
+                    <td>{{ wf.id }}</td>
+                    <td><a href="/viewer/{{ wf.id }}">{{ wf.name }}</a></td>
+                    <td>{{ wf.node_count }}</td>
+                    <td><span class="badge trigger">{{ wf.trigger_type or '-' }}</span></td>
+                    <td><span class="badge source">{{ wf.source }}</span></td>
+                    <td>{{ '✓' if wf.is_active else '-' }}</td>
+                    <td>
+                        <a href="/viewer/{{ wf.id }}" class="btn btn-sm">Ansehen</a>
+                        <a href="/editor/{{ wf.id }}" class="btn btn-sm btn-edit">Bearbeiten</a>
+                        <button onclick="deleteWorkflow({{ wf.id }})" class="btn btn-sm btn-danger">Loeschen</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">Keine Workflows vorhanden. <a href="/import">Importiere</a> oder <a href="/creator">erstelle</a> einen.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function deleteWorkflow(id) {
+    if (!confirm('Workflow wirklich loeschen?')) return;
+    const resp = await apiClient.delete('/api/workflows/' + id);
+    if (resp.ok) location.reload();
+    else alert('Fehler: ' + (resp.detail || 'Unbekannt'));
+}
+</script>
+{% endblock %}

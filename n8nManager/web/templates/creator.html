@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Workflow erstellen - n8nManager{% endblock %}
+{% block content %}
+<div class="creator">
+    <div class="creator-header">
+        <h1>Neuen Workflow erstellen</h1>
+        <div>
+            <input type="text" id="workflow-name" placeholder="Workflow-Name" class="input-lg" value="Neuer Workflow">
+            <button onclick="saveNewWorkflow()" class="btn btn-primary">Speichern</button>
+        </div>
+    </div>
+    <div class="editor-layout">
+        <div class="editor-sidebar">
+            <h3>Node-Katalog</h3>
+            <div id="node-catalog-list"></div>
+        </div>
+        <div id="creator-graph" class="graph-container"></div>
+        <div class="editor-properties">
+            <h3>Eigenschaften</h3>
+            <div id="property-panel">
+                <p class="empty-state">Nodes aus dem Katalog hinzufuegen</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/graph_renderer.js"></script>
+<script src="/static/js/workflow_editor.js"></script>
+<script>
+    const nodeCatalog = {{ node_catalog | safe }};
+    initCreator('creator-graph', nodeCatalog);
+</script>
+{% endblock %}
